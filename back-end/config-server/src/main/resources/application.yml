@@ -1,0 +1,12 @@
+server:
+  port: 1100
+
+spring:
+  cloud:
+    compatibility-verifier:
+      enabled: true
+
+    config:
+      server:
+        git:
+          uri: file:///E://config-banking-repo
