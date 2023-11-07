@@ -1,9 +1,8 @@
 package com.digitalbanking.accountservice;
 
-import com.digitalbanking.accountservice.model.BankAccount;
 import com.digitalbanking.accountservice.model.CurrentAccount;
-import com.digitalbanking.accountservice.model.SavingAccount;
-import com.digitalbanking.accountservice.repository.BankAccountRepository;
+import com.digitalbanking.accountservice.model.enumerationAccount.AccountStatus;
+import com.digitalbanking.accountservice.repository.CurrentAccountRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,9 +17,9 @@ public class AccountServiceApplication {
 		SpringApplication.run(AccountServiceApplication.class, args);
 	}
 	@Bean
-	CommandLineRunner commandLineRunner(BankAccountRepository repository) {
+	CommandLineRunner commandLineRunner(CurrentAccountRepository repository) {
 		return args -> {
-
+			repository.save(new CurrentAccount(new BigDecimal(12), AccountStatus.CREATED, new BigDecimal(4)));
 		};
 	}
 

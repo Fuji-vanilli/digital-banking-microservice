@@ -12,16 +12,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Data
-@AllArgsConstructor @NoArgsConstructor
-@SuperBuilder
-@Builder
-@Document(value = "bankAccount")
 public abstract class BankAccount {
-    @Id
-    private String id;
-    private BigDecimal balance;
-    private Date createdAt;
-    private AccountStatus status;
+    protected String id;
+    protected BigDecimal balance;
+    protected Date createdAt;
+    protected AccountStatus status;
 
+    public BankAccount() {}
+
+    public BankAccount(BigDecimal balance, AccountStatus status) {
+        this.balance = balance;
+        this.status = status;
+    }
 }

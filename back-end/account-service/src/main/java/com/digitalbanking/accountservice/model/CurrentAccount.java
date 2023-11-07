@@ -1,17 +1,20 @@
 package com.digitalbanking.accountservice.model;
 
 import com.digitalbanking.accountservice.model.enumerationAccount.AccountStatus;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 
-@Builder
-@AllArgsConstructor @NoArgsConstructor
+//@Data
+//@Builder
 @Document(value = "currentAccount")
 public class CurrentAccount extends BankAccount{
     private BigDecimal overDraft;
+
+    public CurrentAccount() {}
+    public CurrentAccount(BigDecimal balance, AccountStatus status, BigDecimal overDraft) {
+        super(balance, status);
+        this.overDraft= overDraft;
+    }
 }
