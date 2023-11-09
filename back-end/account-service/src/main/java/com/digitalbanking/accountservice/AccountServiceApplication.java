@@ -1,14 +1,16 @@
 package com.digitalbanking.accountservice;
 
-import com.digitalbanking.accountservice.model.CurrentAccount;
-import com.digitalbanking.accountservice.model.enumerationAccount.AccountStatus;
-import com.digitalbanking.accountservice.repository.CurrentAccountRepository;
+import com.digitalbanking.accountservice.entitie.BankAccount;
+import com.digitalbanking.accountservice.entitie.enumerationAccount.AccountType;
+import com.digitalbanking.accountservice.repository.BankAccountRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 @SpringBootApplication
 public class AccountServiceApplication {
@@ -17,9 +19,23 @@ public class AccountServiceApplication {
 		SpringApplication.run(AccountServiceApplication.class, args);
 	}
 	@Bean
-	CommandLineRunner commandLineRunner(CurrentAccountRepository repository) {
+	CommandLineRunner commandLineRunner(BankAccountRepository repository) {
 		return args -> {
-			repository.save(new CurrentAccount(new BigDecimal(12), AccountStatus.CREATED, new BigDecimal(4)));
+			List<BankAccount> bankAccounts= List.of(
+					BankAccount.builder()
+							.accountType(AccountType.CURRENT_ACCOUNT)
+							.balance(new BigDecimal(5000))
+							.createdAt(new Date())
+							.code("Dollar")
+							.build(),
+					BankAccount.builder()
+							.accountType(AccountType.CURRENT_ACCOUNT)
+							.balance(new BigDecimal(7000))
+							.createdAt(new Date())
+							.code("Euro")
+							.build()
+			);
+			repository.saveAll(bankAccounts);
 		};
 	}
 
