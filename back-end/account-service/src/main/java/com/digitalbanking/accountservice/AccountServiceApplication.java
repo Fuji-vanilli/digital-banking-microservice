@@ -18,7 +18,7 @@ public class AccountServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AccountServiceApplication.class, args);
 	}
-	@Bean
+	//@Bean
 	CommandLineRunner commandLineRunner(BankAccountRepository repository) {
 		return args -> {
 			List<BankAccount> bankAccounts= List.of(

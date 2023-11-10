@@ -2,6 +2,8 @@ package com.digitalbanking.customerservice.controller;
 
 import com.digitalbanking.customerservice.Utils.Response;
 import com.digitalbanking.customerservice.dto.CustomerRequest;
+import com.digitalbanking.customerservice.model.Customer;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.ws.rs.Path;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

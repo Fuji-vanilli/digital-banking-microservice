@@ -4,7 +4,9 @@ import com.digitalbanking.accountservice.Utils.Response;
 import com.digitalbanking.accountservice.dto.BankAccountRequest;
 import com.digitalbanking.accountservice.entitie.BankAccount;
 import com.digitalbanking.accountservice.mapper.BankAccountMapper;
+import com.digitalbanking.accountservice.model.Customer;
 import com.digitalbanking.accountservice.repository.BankAccountRepository;
+import com.digitalbanking.accountservice.restClient.WebClientGetter;
 import com.digitalbanking.accountservice.validator.BankAccountValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -26,6 +29,7 @@ import java.util.*;
 public class BankAccountServiceImpl implements BankAccountService{
     private final BankAccountRepository repository;
     private final BankAccountMapper bankAccountMapper;
+    private final WebClientGetter webClient;
     @Override
     public Response add(BankAccountRequest request) {
         List<String> errors= BankAccountValidator.validate(request);
@@ -87,6 +91,9 @@ public class BankAccountServiceImpl implements BankAccountService{
         }
 
         BankAccount bankAccount= bankAccountOptional.get();
+        Customer customer= webClient.getCustomer(bankAccount.getCustomerCode());
+        bankAccount.setCustomer(customer);
+
         log.info("bank account with the code: "+code+" getted successfully!");
         return generateResponse(
                 HttpStatus.OK,
@@ -109,7 +116,14 @@ public class BankAccountServiceImpl implements BankAccountService{
                 null,
                 Map.of(
                         "contents number", repository.findAll(pageable).getContent().size(),
-                        "bankAccounts", repository.findAll(pageable).getContent()
+                        "bankAccounts", repository.findAll(pageable).getContent().stream()
+                                .map(account-> {
+                                    Customer customer= webClient.getCustomer(account.getCustomerCode());
+                                    account.setCustomer(customer);
+
+                                    return bankAccountMapper.mapToBankAccountResponse(account);
+                                })
+                                .collect(Collectors.toList())
                 ),
                 "all bank account with the page: "+page+" and size: "+size+" getted successfully!"
         );
