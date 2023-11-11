@@ -1,6 +1,6 @@
 package com.digitalbanking.accountservice.dto;
 
-import com.digitalbanking.accountservice.entitie.enumerationAccount.AccountType;
+import com.digitalbanking.accountservice.enumerationAccount.AccountType;
 import com.digitalbanking.accountservice.model.Customer;
 import lombok.*;
 
@@ -14,6 +14,7 @@ public class BankAccountResponse {
     private String code;
     private BigDecimal balance;
     private Date createdAt;
+    private Date updateBalance;
     private AccountType accountType;
     private Customer customer;
     private String currency;

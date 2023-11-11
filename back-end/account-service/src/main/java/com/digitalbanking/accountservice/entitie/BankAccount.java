@@ -1,6 +1,6 @@
 package com.digitalbanking.accountservice.entitie;
 
-import com.digitalbanking.accountservice.entitie.enumerationAccount.AccountType;
+import com.digitalbanking.accountservice.enumerationAccount.AccountType;
 import com.digitalbanking.accountservice.model.Customer;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -18,6 +18,7 @@ public class BankAccount {
     private String code;
     private BigDecimal balance;
     private Date createdAt;
+    private Date updateBalance;
     private AccountType accountType;
     private Customer customer;
     private String currency;

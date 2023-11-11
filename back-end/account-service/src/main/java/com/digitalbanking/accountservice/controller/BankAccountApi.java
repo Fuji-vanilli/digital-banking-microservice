@@ -8,10 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.digitalbanking.accountservice.Utils.Root.APP_ROOT;
+import static com.digitalbanking.accountservice.Utils.Root.APP_ROOT_BANK_ACCOUNT;
 
 @RestController
-@RequestMapping(APP_ROOT)
+@RequestMapping(APP_ROOT_BANK_ACCOUNT)
 @RequiredArgsConstructor
 public class BankAccountApi implements BankAccountController{
     private final BankAccountService bankAccountService;

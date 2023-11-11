@@ -1,17 +1,13 @@
 package com.digitalbanking.accountservice.restClient;
 
 import com.digitalbanking.accountservice.model.Customer;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -21,10 +17,9 @@ import java.util.concurrent.ExecutionException;
 public class WebClientGetter {
     private final WebClient.Builder webClient;
 
-    @CircuitBreaker(name = "customerService", fallbackMethod = "getDefaultCustomer")
     public Customer getCustomer(String code) {
         final CompletableFuture<String> dataFuture = webClient.build().get()
-                .uri("http://localhost:8888/CUSTOMER-SERVICE/api/customer/get/"+code)
+                .uri("http://localhost:8888/CUSTOMER-SERVICE/api/customer/get/" + code)
                 .retrieve()
                 .bodyToMono(String.class)
                 .toFuture();
@@ -51,7 +46,6 @@ public class WebClientGetter {
         } catch (JSONException e) {
             throw new RuntimeException("Error to deserialize json object");
         }
-
         return customer;
     }
     public Customer getDefaultCustomer(String code, Exception exception) {

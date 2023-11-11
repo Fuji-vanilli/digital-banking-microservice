@@ -25,6 +25,7 @@ public class BankAccountMapperImpl implements BankAccountMapper{
                 .balance(bankAccount.getBalance())
                 .currency(bankAccount.getCurrency())
                 .createdAt(bankAccount.getCreatedAt())
+                .updateBalance(bankAccount.getUpdateBalance())
                 .customer(bankAccount.getCustomer())
                 .customerCode(bankAccount.getCustomerCode())
                 .build();
