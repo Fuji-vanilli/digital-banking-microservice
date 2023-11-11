@@ -14,7 +14,9 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -26,30 +28,30 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
         Collection<GrantedAuthority> authorities= Stream.concat(
-                extractRoles(jwt).stream(), jwtGrantedAuthoritiesConverter.convert(jwt).stream()
+                extractRoles(jwt).stream(), Objects.requireNonNull(jwtGrantedAuthoritiesConverter.convert(jwt)).stream()
         ).toList();
 
-        return new JwtAuthenticationToken(jwt, authorities, getClaims(jwt));
+        return new JwtAuthenticationToken(jwt, authorities, getPrincipalClaimName(jwt));
     }
     public Collection<? extends GrantedAuthority> extractRoles(Jwt jwt) {
-        Map<String, Object> accessResource= jwt.getClaims();
+        Map<String, Object> accessResource= jwt.getClaim("resource_access");
         Map<String, Object> resource;
         Collection<String> resourceRoles;
 
         if (accessResource== null
                 || (resource= (Map<String, Object>) accessResource.get(jwtAuthConverterProperties.getResourceId()))== null
-                || (resourceRoles= (Collection<String>) resource.get("role"))== null) {
+                || (resourceRoles= (Collection<String>) resource.get("roles"))== null) {
             return Set.of();
         }
 
         return resourceRoles.stream()
                 .map(role-> new SimpleGrantedAuthority("ROLE_"+role))
-                .toList();
+                .collect(Collectors.toSet());
     }
-    public String getClaims(Jwt jwt) {
+    public String getPrincipalClaimName(Jwt jwt) {
         String claimName= JwtClaimNames.SUB;
         if (jwtAuthConverterProperties.getResourceId()!= null) {
-            claimName= jwtAuthConverterProperties.getResourceId();
+            claimName= jwtAuthConverterProperties.getPrincipalAttribute();
         }
         return jwt.getClaim(claimName);
     }

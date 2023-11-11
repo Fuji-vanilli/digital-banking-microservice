@@ -25,7 +25,7 @@ public class SecurityConfiguration {
         httpSecurity
                 .sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(Customizer.withDefaults())
-                .oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthConverter);
+                .oauth2ResourceServer(oauth-> oauth.jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(jwtAuthConverter)));
 
         return httpSecurity.build();
     }

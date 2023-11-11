@@ -11,5 +11,5 @@ import org.springframework.validation.annotation.Validated;
 @Configuration
 public class JwtAuthConverterProperties {
     private String resourceId;
-    private String attributePrincipal;
+    private String principalAttribute;
 }
