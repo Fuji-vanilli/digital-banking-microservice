@@ -1,4 +1,4 @@
-package com.digitalbanking.gatewayservice.security;
+package com.digitalbanking.accountservice.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -21,39 +21,39 @@ import java.util.stream.Stream;
 @Configuration
 @RequiredArgsConstructor
 public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationToken> {
+    private final JwtAuthProperties properties;
     private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter;
-    private final JwtAuthConfigProperties properties;
-
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
         Collection<GrantedAuthority> authorities= Stream.concat(
-                extractRoles(jwt).stream(),
-                Objects.requireNonNull(jwtGrantedAuthoritiesConverter.convert(jwt)).stream()
+                Objects.requireNonNull(jwtGrantedAuthoritiesConverter.convert(jwt)).stream(),
+                extractRoles(jwt).stream()
         ).collect(Collectors.toSet());
 
         return new JwtAuthenticationToken(jwt, authorities, getPrincipalClaimName(jwt));
     }
-    public Collection<? extends GrantedAuthority> extractRoles(Jwt jwt) {
+    private Collection<? extends GrantedAuthority> extractRoles(Jwt jwt) {
         Map<String, Object> resourceAccess= jwt.getClaim("resource_access");
         Map<String, Object> resource;
         Collection<String> resourceRoles;
 
         if (resourceAccess== null
-            || (resource = (Map<String, Object>) resourceAccess.get(properties.getResourceId()))== null
-                || (resourceRoles= (Collection<String>) resource.get("roles"))== null
-        ) {
+            || (resource= (Map<String, Object>) resourceAccess.get(properties.getResourceId()))== null
+            || (resourceRoles= (Collection<String>) resource.get("roles"))== null) {
+
             return Set.of();
         }
+
         return resourceRoles.stream()
                 .map(role-> new SimpleGrantedAuthority("ROLE_"+role))
                 .collect(Collectors.toSet());
     }
-    public String getPrincipalClaimName(Jwt jwt) {
+    private String getPrincipalClaimName(Jwt jwt) {
         String claimName= JwtClaimNames.SUB;
-
-        if (properties.getResourceId()!= null) {
+        if (properties.getPrincipalAttribute()!= null) {
             claimName= properties.getPrincipalAttribute();
         }
         return jwt.getClaim(claimName);
     }
+
 }

@@ -11,16 +11,13 @@ import java.net.URL;
 
 @Configuration
 public class ConfigGeneral {
-
     @Bean
-    public JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter() {
+    public JwtGrantedAuthoritiesConverter jwtGrantedConverter() {
         return new JwtGrantedAuthoritiesConverter();
     }
-    @Bean
+    //@Bean
     public JwtDecoder jwtDecoder() throws MalformedURLException {
-        return NimbusJwtDecoder.withJwkSetUri(
-                new URL("http://localhost:8080/realms/banking-realm/protocol/openid-connect/certs").toString()
-        ).build();
+        URL jwkSetUri= new URL("http://localhost:8080/realms/banking-realm/protocol/openid-connect/certs");
+        return NimbusJwtDecoder.withJwkSetUri(jwkSetUri.toString()).build();
     }
-
 }

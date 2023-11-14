@@ -1,0 +1,67 @@
+{
+  "customers": [
+    {
+      "id": 1,
+      "code": "X-250",
+      "name": "Andrew Garfield",
+      "email": "andrew@gmail.com",
+      "checked": false
+    },
+    {
+      "id": 2,
+      "code": "XL-125",
+      "name": "Star wars",
+      "email": "star@gmail.com",
+      "checked": true
+    },
+    {
+      "id": 1,
+      "code": "X-250",
+      "name": "Andrew Garfield",
+      "email": "andrew@gmail.com",
+      "checked": true
+    },
+    {
+      "id": 2,
+      "code": "XL-125",
+      "name": "Star wars",
+      "email": "star@gmail.com",
+      "checked": false
+    },
+    {
+      "id": 1,
+      "code": "X-250",
+      "name": "Andrew Garfield",
+      "email": "andrew@gmail.com",
+      "checked": true
+    },
+    {
+      "id": 2,
+      "code": "XL-125",
+      "name": "Star wars",
+      "email": "star@gmail.com",
+      "checked": false
+    },
+    {
+      "code": "M-50",
+      "name": "Tom Hardy",
+      "email": "tom@gmail.com",
+      "checked": true,
+      "id": 3
+    },
+    {
+      "code": "RC-01",
+      "name": "Robinson Crusoé",
+      "email": "robinson@gmail.com",
+      "checked": true,
+      "id": 4
+    },
+    {
+      "code": "Orlando",
+      "name": "Bloom ",
+      "email": "orlando@gmail.com",
+      "checked": true,
+      "id": 5
+    }
+  ]
+}

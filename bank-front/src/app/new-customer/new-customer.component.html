@@ -1,0 +1,25 @@
+<div class="card col-md-6">
+    <div class="card-body">
+        <div class="row">
+            <div >
+                {{customerForm.value | json}}
+                <form [formGroup]="customerForm" (ngSubmit)="saveProduct()">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="Code" formControlName= "code">
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="Name" formControlName= "name">
+                    </div>
+                    <div class="mb-3">
+                        <input type="email" class="form-control" placeholder="Email" formControlName= "email">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label ms-2">Checked</label>
+                        <input type="checkbox" class="form-check-input ms-2" formControlName= "checked">
+                    </div>
+                    <button class="btn btn-success" [disabled]="customerForm.invalid" >Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

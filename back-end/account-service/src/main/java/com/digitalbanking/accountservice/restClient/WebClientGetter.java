@@ -19,7 +19,7 @@ public class WebClientGetter {
 
     public Customer getCustomer(String code) {
         final CompletableFuture<String> dataFuture = webClient.build().get()
-                .uri("http://localhost:8888/CUSTOMER-SERVICE/api/customer/get/" + code)
+                .uri("http://localhost:5200/api/customer/get/" + code)
                 .retrieve()
                 .bodyToMono(String.class)
                 .toFuture();

@@ -2,6 +2,7 @@ package com.digitalbanking.gatewayservice.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,42 +19,41 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+
 @Configuration
 @RequiredArgsConstructor
 public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationToken> {
+    private final JwtAuthConverterProperties jwtAuthConverterProperties;
     private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter;
-    private final JwtAuthConfigProperties properties;
-
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
         Collection<GrantedAuthority> authorities= Stream.concat(
-                extractRoles(jwt).stream(),
-                Objects.requireNonNull(jwtGrantedAuthoritiesConverter.convert(jwt)).stream()
-        ).collect(Collectors.toSet());
+                extractRoles(jwt).stream(), Objects.requireNonNull(jwtGrantedAuthoritiesConverter.convert(jwt)).stream()
+        ).toList();
 
         return new JwtAuthenticationToken(jwt, authorities, getPrincipalClaimName(jwt));
     }
     public Collection<? extends GrantedAuthority> extractRoles(Jwt jwt) {
-        Map<String, Object> resourceAccess= jwt.getClaim("resource_access");
+        Map<String, Object> accessResource= jwt.getClaim("resource_access");
         Map<String, Object> resource;
         Collection<String> resourceRoles;
 
-        if (resourceAccess== null
-            || (resource = (Map<String, Object>) resourceAccess.get(properties.getResourceId()))== null
-                || (resourceRoles= (Collection<String>) resource.get("roles"))== null
-        ) {
+        if (accessResource== null
+                || (resource= (Map<String, Object>) accessResource.get(jwtAuthConverterProperties.getResourceId()))== null
+                || (resourceRoles= (Collection<String>) resource.get("roles"))== null) {
             return Set.of();
         }
+
         return resourceRoles.stream()
                 .map(role-> new SimpleGrantedAuthority("ROLE_"+role))
                 .collect(Collectors.toSet());
     }
     public String getPrincipalClaimName(Jwt jwt) {
         String claimName= JwtClaimNames.SUB;
-
-        if (properties.getResourceId()!= null) {
-            claimName= properties.getPrincipalAttribute();
+        if (jwtAuthConverterProperties.getResourceId()!= null) {
+            claimName= jwtAuthConverterProperties.getPrincipalAttribute();
         }
         return jwt.getClaim(claimName);
     }
+
 }
