@@ -12,7 +12,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { NewCustomerComponent } from './new-customer/new-customer.component';
 import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EditCustomerComponent } from './edit-customer/edit-customer.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
     CustomerComponent,
     NavbarComponent,
     NewCustomerComponent,
-    HomeComponent
+    HomeComponent,
+    EditCustomerComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +32,8 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
     MatToolbarModule,
     MatIconModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

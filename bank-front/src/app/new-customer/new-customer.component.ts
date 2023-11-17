@@ -25,7 +25,7 @@ export class NewCustomerComponent implements OnInit{
     });
   }
 
-  saveProduct() {
+  saveCustomer() {
     let customer= this.customerForm.value;
     this.customerService.saveProduct(customer).subscribe({
       next: customer=> {

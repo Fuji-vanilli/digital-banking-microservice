@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CustomersService } from '../services/customers.service';
 import { Customer } from '../model/customer.model';
+import { HttpResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-customer',
@@ -10,17 +12,28 @@ import { Customer } from '../model/customer.model';
 export class CustomerComponent implements OnInit{
 
   customers!: Array<Customer>;
+  keyword: string= "";
+  totalPage: number= 1;
+  currentPage: number= 1;
+  pageSize: number= 5;
 
-  constructor(private customerService: CustomersService) {}
+  constructor(private customerService: CustomersService,
+              private route: Router) {}
 
   ngOnInit(): void {
     this.getCustomers();
   }
   
   getCustomers() {
-    this.customerService.getCustomers().subscribe({
-      next: response => {
-        this.customers= response;
+    this.customerService.getCustomers(this.keyword,this.currentPage,this.pageSize).subscribe({
+      next: (resp: HttpResponse<Object>) => {
+        this.customers= resp.body as Customer[];
+        let totalCustomers: number= parseInt(resp.headers.get('X-total-count')!);
+
+        this.totalPage= Math.floor(totalCustomers / this.pageSize);
+        if (this.totalPage % this.pageSize != 0) {
+          this.totalPage+= 1;
+        }
       },
       error: err => {
         console.log(err);
@@ -41,11 +54,19 @@ export class CustomerComponent implements OnInit{
     if (confirm("Are you sure!?")) {
       this.customerService.deleteCustomer(customer).subscribe({
         next: data=> {
-          this.customers= this.customers.filter(c=> c.id!= customer.id)
+          this.customers= this.customers.filter(c=> c.code!= customer.code)
+
+          this.getCustomers();
         }
       })
     }
   }
-
+  handlePageCheck(current: number) {
+    this.currentPage= current;
+    this.getCustomers();
+  }
+  handleEdit(id: number) {
+    this.route.navigateByUrl('/editCustomer/'+id);
+  }
 
 }
